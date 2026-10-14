@@ -1,0 +1,82 @@
+\ProvidesPackage{header}[2026/09/29 Пакет настроек для курса ДУ]
+
+% --- Язык и шрифты ---
+\usepackage{cmap}                   % Поиск в PDF
+\usepackage{indentfirst}            % Отступ первого абзаца
+\usepackage[T2A]{fontenc}           % Кодировка шрифтов
+\usepackage[utf8]{inputenc}         % Кодировка исходного текста
+\usepackage[english,russian]{babel} % Локализация и переносы
+
+% --- Кастомизация списков ---
+\usepackage{enumitem}
+
+% --- Математика ---
+\usepackage{amsmath, amsfonts, amssymb, amsthm, mathtools}
+\usepackage{icomma} % "Умная" запятая: $0,2$ — число, $0, 2$ — перечисление
+\usepackage{cancel} % Для зачеркивания сокращаемых слагаемых
+
+% Показывать номера только у тех формул, на которые есть \eqref{} или \noeqref{}
+\mathtoolsset{showonlyrefs=true}
+
+% --- Графика и алгоритмы ---
+\usepackage{xcolor}
+\usepackage{float}          % Окружение [H] — "поставить ровно здесь"
+\usepackage{pgfplots}       % Графики функций
+\pgfplotsset{compat=1.18}
+\usepackage{tikz}           % Векторная графика
+\usepackage{wrapfig}        % Обтекание текстом
+\usepackage{graphicx}
+\graphicspath{{img/}}
+\usepackage{listings}       % Для вставок кода
+
+% --- Настройки страницы и ссылок ---
+\usepackage[
+    left=1.5cm,
+    right=1.5cm,
+    top=2cm,
+    bottom=2cm,
+    bindingoffset=0cm
+]{geometry}
+\usepackage[
+    unicode=true,
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=black
+]{hyperref}
+\usepackage{nameref}
+
+% --- Оформление теорем и определений ---
+\theoremstyle{plain}
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{proposition}[theorem]{Утверждение}
+\newtheorem*{corollary}{Следствие}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}[section]
+\newtheorem{problem}{Задача}[section]
+\newtheorem*{designation}{Обозначение}
+\newtheorem*{properties}{Свойства}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Замечание}[section]
+\newtheorem*{example}{Пример}
+
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+% --- Пользовательские макросы (шорткаты) ---
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\renewcommand{\C}{\mathbb{C}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\eps}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\norm}[1]{\left\| #1 \right\|}
+
+% Кастомная команда для выделения определяемых терминов
+\newcommand{\textdef}[1]{\underline{\textbf{\textit{#1}}}}

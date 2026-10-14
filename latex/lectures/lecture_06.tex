@@ -1,0 +1,475 @@
+\section{Лекция 6. Обобщенно-однородные, линейные дифференциальные уравнения, уравнения Бернулли и Риккати}
+\noeqref{eq:l6_gen_hom_sub, eq:l6_gen_hom_ex, eq:l6_lnde, eq:l6_lode}
+\noeqref{eq:l6_lode_sol, eq:l6_lagr_sub, eq:l6_lnde_struct, eq:l6_bern_sub}
+\noeqref{eq:l6_bern_eq, eq:l6_bern_z, eq:l6_bern_lin, eq:l6_riccati}
+\noeqref{eq:l6_riccati_spec, eq:l6_riccati_sub, eq:l6_riccati_bern}
+\noeqref{eq:l6_riccati_u, eq:l6_riccati_lin, eq:l6_task1_lin, eq:l6_task1_u1}
+\noeqref{eq:l6_task1_v, eq:l6_task2_hom}
+
+\begin{flushright}
+    12.10.26
+\end{flushright}
+
+\subsection{Обобщенно-однородные дифференциальные уравнения}
+
+Некоторые нелинейные уравнения, не являющиеся однородными в смысле
+определения 5.2 из Лекции 5, сводятся к однородным с помощью степенной замены
+искомой функции.
+
+\begin{definition}
+    Дифференциальное уравнение 1-го порядка называется
+    \textdef{обобщенно-однородным}, если существует такое вещественное число
+    $m \in \R$, что при приписывании переменной $x$ измерения (веса) $1$,
+    функции $y$ — измерения $m$, а производной $y' = \frac{dy}{dx}$ —
+    измерения $m - 1$, все слагаемые уравнения приобретают одинаковое суммарное
+    измерение.
+\end{definition}
+
+\textbf{Алгоритм решения:}
+Выполним степенную подстановку:
+\begin{equation} \label{eq:l6_gen_hom_sub}
+    y = z^m \implies y' = m z^{m-1} z'. \tag{1}
+\end{equation}
+Приравнивая суммарные показатели степени (при которых $x$ и $z$ имеют вес $1$)
+у всех слагаемых уравнения, находим показатель $m$. После подстановки
+найденного $m$ и сокращения общих множителей получается классическое однородное
+уравнение вида $z' = f(z/x)$ из Лекции 5.
+
+\begin{example} ~
+    \begin{equation} \label{eq:l6_gen_hom_ex}
+        2 x^2 y' = y^3 + x y. \tag{2}
+    \end{equation}
+
+    \begin{proof}[Решение]~\\
+        \begin{quote}
+            \textbf{Шаг 1. Определение показателя $m$.}\\
+            Подставляя $y = z^m$ и $y' = m z^{m-1} z'$, получаем:
+            \[
+                2 m x^2 z^{m-1} z' = z^{3m} + x z^m.
+            \]
+            Выпишем суммарные измерения слагаемых (считая веса $x$ и $z$
+            равными $1$, а вес $z'$ равным $0$):
+            \begin{itemize}
+                \item для $2 m x^2 z^{m-1} z'$: измерение равно $2 + (m - 1) = m + 1$;
+                \item для $z^{3m}$: измерение равно $3m$;
+                \item для $x z^m$: измерение равно $1 + m$.
+            \end{itemize}
+            Приравнивая измерения, находим:
+            \[
+                m + 1 = 3m \implies 2m = 1 \implies m = \frac{1}{2}.
+            \]
+
+            \textbf{Шаг 2. Приведение к однородному уравнению.}\\
+            Полагаем $y = z^{1/2} = \sqrt{z}$ ($z > 0$), тогда
+            $y' = \frac{z'}{2\sqrt{z}}$:
+            \[
+                2 x^2 \frac{z'}{2\sqrt{z}} = z^{3/2} + x \sqrt{z}
+                \implies x^2 z' = z^2 + x z \implies
+                z' = \left(\frac{z}{x}\right)^2 + \frac{z}{x}.
+            \]
+
+            \textbf{Шаг 3. Решение однородного уравнения и обратная замена.}\\
+            Замена $z = u x \implies z' = u' x + u$ даёт:
+            \[
+                u' x + u = u^2 + u \implies \frac{du}{u^2} = \frac{dx}{x}
+                \implies -\frac{1}{u} = \ln \abs{x} + C.
+            \]
+            Возвращаясь к $z = u x$ и $y^2 = z$, получаем:
+            \[
+                z = \frac{-x}{\ln \abs{x} + C} \implies
+                y(x) = \pm \sqrt{\frac{-x}{\ln \abs{x} + C}}.
+            \]
+            Потерянный при делении на $u^2$ корень $u = 0$ даёт решение
+            $y(x) \equiv 0$, которое выписывается отдельно.
+
+            \textbf{Ответ:} $y = \pm \sqrt{\dfrac{-x}{\ln \abs{x} + C}}$, а
+            также $y = 0$.
+        \end{quote}
+    \end{proof}
+\end{example}
+
+\subsection{Линейные дифференциальные уравнения 1-го порядка}
+
+\begin{definition}
+    \textdef{Линейным неоднородным дифференциальным уравнением (ЛНДУ)} 1-го
+    порядка называется уравнение, линейное относительно искомой функции $y$ и
+    её производной $y'$:
+    \begin{equation} \label{eq:l6_lnde}
+        a_0(x) y' + a_1(x) y = b(x), \tag{3}
+    \end{equation}
+    где коэффициенты и правая часть непрерывны на интервале $I \subset \R$:
+    $a_0, a_1, b \in C(I)$, причём $a_0(x) \neq 0$ для всех $x \in I$.
+\end{definition}
+
+\begin{definition}
+    Если $b(x) \equiv 0$ на $I$, то уравнение называется \textdef{линейным
+    однородным дифференциальным уравнением (ЛОДУ)}:
+    \begin{equation} \label{eq:l6_lode}
+        a_0(x) y' + a_1(x) y = 0. \tag{4}
+    \end{equation}
+\end{definition}
+
+\subsubsection{Алгебраические свойства и интегрирование ЛОДУ}
+
+\begin{properties} ~
+    \begin{enumerate}
+        \item Если $y_1(x)$ — решение ЛОДУ \eqref{eq:l6_lode}, то для любой
+        константы $\alpha \in \R$ функция $y(x) = \alpha y_1(x)$ также
+        является решением ЛОДУ:
+        $a_0 (\alpha y_1)' + a_1 (\alpha y_1) = \alpha (a_0 y_1' + a_1 y_1) = 0$.
+        \item Если $y_1(x)$ и $y_2(x)$ — решения ЛОДУ \eqref{eq:l6_lode}, то
+        их сумма $y(x) = y_1(x) + y_2(x)$ также является решением ЛОДУ:
+        $a_0(y_1 + y_2)' + a_1(y_1 + y_2) = (a_0 y_1' + a_1 y_1) +
+        (a_0 y_2' + a_1 y_2) = 0$.
+        \item Тривиальная функция $y(x) \equiv 0$ всегда является решением
+        ЛОДУ \eqref{eq:l6_lode}.
+    \end{enumerate}
+\end{properties}
+
+\begin{corollary}
+    Множество всех решений линейного однородного уравнения \eqref{eq:l6_lode}
+    на интервале $I$ образует \textdef{линейное (векторное) пространство}.
+\end{corollary}
+
+Разделяя переменные в уравнении \eqref{eq:l6_lode} и интегрируя, получаем
+\textdef{общее решение однородного уравнения} $y_{\text{оо}}(x)$:
+\begin{equation} \label{eq:l6_lode_sol}
+    \frac{dy}{y} = -\frac{a_1(x)}{a_0(x)} \, dx \implies
+    y_{\text{оо}}(x) = C \cdot e^{-\int \frac{a_1(x)}{a_0(x)} \, dx} =
+    C \cdot y_{\text{чо}}(x), \tag{5}
+\end{equation}
+где $y_{\text{чо}}(x) = e^{-\int \frac{a_1(x)}{a_0(x)} \, dx}$ — нетривиальное
+базисное \textdef{частное решение однородного уравнения}.
+
+\subsection{Интегрирование ЛНДУ (два базовых метода)}
+
+\subsubsection{Метод I. Метод Лагранжа (вариация произвольной постоянной)}
+
+\begin{proof}[Вывод формулы методом Лагранжа]~\\
+    \begin{quote}
+        Будем искать общее решение неоднородного уравнения \eqref{eq:l6_lnde}
+        в том же виде, что и решение однородного уравнения
+        \eqref{eq:l6_lode_sol}, заменив постоянную $C$ на неизвестную
+        дифференцируемую функцию $C(x) \in C^1(I)$:
+        \begin{equation} \label{eq:l6_lagr_sub}
+            y_{\text{он}}(x) = C(x) \cdot e^{-\int \frac{a_1(x)}{a_0(x)} \, dx}.
+            \tag{6}
+        \end{equation}
+        Вычислим производную $y_{\text{он}}'$ по правилу Лейбница и подставим
+        $y_{\text{он}}$ и $y_{\text{он}}'$ в уравнение \eqref{eq:l6_lnde}:
+        \begin{align*}
+            y_{\text{он}} &= C(x) \cdot e^{-\int \frac{a_1(x)}{a_0(x)} \, dx}
+            &&\Big| \cdot a_1(x), \\
+            y_{\text{он}}' &= C'(x) \cdot e^{-\int \frac{a_1(x)}{a_0(x)} \, dx}
+            - C(x) \frac{a_1(x)}{a_0(x)} e^{-\int \frac{a_1(x)}{a_0(x)} \, dx}
+            &&\Big| \cdot a_0(x).
+        \end{align*}
+        При сложении слагаемые, содержащие $C(x)$ без производной, взаимно
+        уничтожаются, и остаётся:
+        \[
+            a_0(x) C'(x) e^{-\int \frac{a_1(x)}{a_0(x)} \, dx} = b(x)
+            \implies C(x) = \int \frac{b(x)}{a_0(x)}
+            e^{\int \frac{a_1(x)}{a_0(x)} \, dx} \, dx + C.
+        \]
+        Подставляя найденную функцию $C(x)$ в \eqref{eq:l6_lagr_sub}, получаем
+        структуру общего решения ЛНДУ:
+        \begin{equation} \label{eq:l6_lnde_struct}
+            y_{\text{он}}(x) =
+            \underbrace{C \cdot e^{-\int \frac{a_1(x)}{a_0(x)} \, dx}}_{y_{\text{оо}}(x)}
+            + \underbrace{e^{-\int \frac{a_1(x)}{a_0(x)} \, dx}
+            \int \frac{b(x)}{a_0(x)} e^{\int \frac{a_1(x)}{a_0(x)} \, dx} \, dx}_{y_{\text{чн}}(x)}.
+            \tag{7}
+        \end{equation}
+    \end{quote}
+\end{proof}
+
+\begin{theorem}[\textbf{О структуре общего решения ЛНДУ}]
+    Общее решение линейного неоднородного дифференциального уравнения
+    \eqref{eq:l6_lnde} равно сумме общего решения соответствующего однородного
+    уравнения $y_{\text{оо}}(x)$ и любого частного решения неоднородного
+    уравнения $y_{\text{чн}}(x)$:
+    \[
+        y_{\text{он}}(x) = y_{\text{оо}}(x) + y_{\text{чн}}(x) =
+        C y_{\text{чо}}(x) + y_{\text{чн}}(x).
+    \]
+\end{theorem}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[scale=1.15]
+        % Оси координат
+        \draw[->] (-0.8, 0) -- (3.8, 0) node[right] {$x$};
+        \draw[->] (0, -0.8) -- (0, 3.2) node[above] {$y$};
+
+        % Частное решение y_чн(x) (опорная кривая)
+        \draw[red, very thick, domain=-0.4:3.4, samples=80]
+            plot (\x, {1.2 + 0.35*sin(120*\x)})
+            node[right] {$y_{\text{чн}}(x)$};
+
+        % Семейство решений y_он = y_чн + C * y_чо
+        \foreach \c in {-1.2, -0.6, 0.6, 1.3} {
+            \draw[blue, thick, dashed, domain=-0.4:3.4, samples=80]
+                plot (\x, {1.2 + 0.35*sin(120*\x) + \c*exp(-0.6*\x)});
+        }
+
+        % Иллюстрация вертикального сдвига C * y_чо(x_1)
+        \def\xA{0.8}
+        \pgfmathsetmacro{\ybase}{1.2 + 0.35*sin(120*\xA)}
+        \pgfmathsetmacro{\ytop}{\ybase + 1.3*exp(-0.6*\xA)}
+        \draw[<->, teal, thick] (\xA, \ybase) -- (\xA, \ytop)
+            node[midway, right] {\footnotesize $C y_{\text{чо}}(x)$};
+        \fill[red] (\xA, \ybase) circle (1.5pt);
+        \fill[blue] (\xA, \ytop) circle (1.5pt);
+    \end{tikzpicture}
+    \caption{Геометрический смысл структуры общего решения ЛНДУ: каждая
+    интегральная кривая $y_{\text{он}}(x)$ получается из опорного частного
+    решения $y_{\text{чн}}(x)$ прибавлением масштабированного решения
+    однородного уравнения $C y_{\text{чо}}(x)$.}
+\end{figure}
+
+\subsubsection{Метод II. Метод Бернулли (представление в виде произведения)}
+
+\begin{proof}[Вывод формулы методом Бернулли]~\\
+    \begin{quote}
+        Будем искать решение уравнения \eqref{eq:l6_lnde} в виде произведения
+        двух неизвестных функций $u, v \in C^1(I)$:
+        \begin{equation} \label{eq:l6_bern_sub}
+            y(x) = u(x) \cdot v(x) \implies y' = u' v + u v'. \tag{8}
+        \end{equation}
+        Подставим \eqref{eq:l6_bern_sub} в уравнение \eqref{eq:l6_lnde} и
+        вынесем $u(x)$ за скобки:
+        \[
+            a_0(x) u' v + u \cdot \underbrace{\left[a_0(x) v' +
+            a_1(x) v\right]}_{= 0} = b(x).
+        \]
+        Выберем нетривиальную функцию $v(x)$ так, чтобы квадратная скобка
+        обратилась в нуль (приняв константу интегрирования равной $1$):
+        \[
+            a_0(x) v' + a_1(x) v = 0 \implies
+            v(x) = e^{-\int \frac{a_1(x)}{a_0(x)} \, dx}.
+        \]
+        Тогда для второй функции $u(x)$ остаётся уравнение:
+        \[
+            a_0(x) u' v(x) = b(x) \implies
+            u(x) = \int \frac{b(x)}{a_0(x) v(x)} \, dx + C.
+        \]
+        Перемножая $y(x) = u(x) \cdot v(x)$, приходим в точности к формуле
+        \eqref{eq:l6_lnde_struct}.
+    \end{quote}
+\end{proof}
+
+\subsection{Уравнение Бернулли}
+
+\begin{definition}
+    \textdef{Уравнением Бернулли} называется нелинейное дифференциальное
+    уравнение вида:
+    \begin{equation} \label{eq:l6_bern_eq}
+        a_0(x) y' + a_1(x) y = b(x) y^k, \tag{9}
+    \end{equation}
+    где $k \in \R \setminus \{0, 1\}$, а функции коэффициентов непрерывны на
+    интервале $I \subset \R$: $a_0, a_1, b \in C(I)$, причём $a_0(x) \neq 0$
+    на $I$.
+\end{definition}
+
+\begin{remark}
+    При $k > 0$ тривиальная функция $y(x) \equiv 0$ всегда является решением
+    уравнения \eqref{eq:l6_bern_eq} (причём при $0 < k < 1$ в силу нарушения
+    условия Липшица в нуле оно является особым). При делении на $y^k$ это
+    решение необходимо фиксировать отдельно.
+\end{remark}
+
+\subsubsection{Способ I. Сведение к ЛНДУ заменой переменной}
+
+\begin{proof}[Алгоритм подстановки]~\\
+    \begin{quote}
+        Разделим обе части уравнения \eqref{eq:l6_bern_eq} на $y^k \neq 0$:
+        \[
+            a_0(x) y^{-k} y' + a_1(x) y^{1-k} = b(x).
+        \]
+        Введём новую неизвестную функцию:
+        \begin{equation} \label{eq:l6_bern_z}
+            z(x) = y^{1-k} \implies z' = (1 - k) y^{-k} y' \implies
+            y^{-k} y' = \frac{z'}{1 - k}. \tag{10}
+        \end{equation}
+        Подстановка в разделённое уравнение приводит к ЛНДУ относительно $z(x)$:
+        \begin{equation} \label{eq:l6_bern_lin}
+            \frac{a_0(x)}{1 - k} z' + a_1(x) z = b(x). \tag{11}
+        \end{equation}
+    \end{quote}
+\end{proof}
+
+\subsubsection{Способ II. Прямое применение подстановки $y = u \cdot v$}
+
+\begin{proof}[Алгоритм метода Бернулли]~\\
+    \begin{quote}
+        Подставим $y = u v$ и $y' = u' v + u v'$ непосредственно в уравнение
+        \eqref{eq:l6_bern_eq}:
+        \[
+            a_0(x) u' v + u \cdot \underbrace{\left[a_0(x) v' +
+            a_1(x) v\right]}_{= 0} = b(x) u^k v^k.
+        \]
+        Находя частное решение $v(x) = e^{-\int \frac{a_1(x)}{a_0(x)} \, dx}$
+        из обнуления скобки, получаем для $u(x)$ уравнение с разделяющимися
+        переменными:
+        \[
+            a_0(x) u' v(x) = b(x) u^k v(x)^k \implies
+            \frac{du}{u^k} = \frac{b(x) v(x)^{k-1}}{a_0(x)} \, dx.
+        \]
+    \end{quote}
+\end{proof}
+
+\subsection{Уравнение Риккати и его свойства}
+
+\begin{definition}
+    \textdef{Уравнением Риккати} называется нелинейное дифференциальное
+    уравнение 1-го порядка с квадратичной нелинейностью по $y$:
+    \begin{equation} \label{eq:l6_riccati}
+        y' = a(x) y^2 + b(x) y + c(x), \tag{12}
+    \end{equation}
+    где функции коэффициентов непрерывны на интервале $I \subset \R$:
+    $a, b, c \in C(I)$ и $a(x) \not\equiv 0$.
+\end{definition}
+
+\begin{remark}
+    В общем случае уравнение Риккати \eqref{eq:l6_riccati} не интегрируется в
+    квадратурах. По теореме Лиувилля специальное уравнение Риккати
+    \begin{equation} \label{eq:l6_riccati_spec}
+        y' = y^2 + x^\alpha \tag{13}
+    \end{equation}
+    интегрируется в элементарных функциях тогда и только тогда, когда
+    $\alpha = -2$ или $\alpha = \dfrac{-4k}{2k \pm 1}$, где $k \in \Z$.
+\end{remark}
+
+\subsubsection{Случай постоянных коэффициентов}
+
+Если коэффициенты $a, b, c$ постоянны, то уравнение Риккати \eqref{eq:l6_riccati}
+представляет собой автономное уравнение с разделяющимися переменными.
+Характерный пример $y' = y^2 - 2y + 1 = (y - 1)^2$ был подробно решён и
+проиллюстрирован в Лекции 3 (см. уравнение \eqref{eq:l3_riccati_ex} и рис. к
+нему): стационарное решение $y \equiv 1$ определено на всём $\R$, тогда как
+все остальные решения $y(x) = 1 - \frac{1}{x + C}$ разрушаются на вертикальных
+асимптотах $x = -C$ из-за квадратичного роста правой части.
+
+\subsubsection{Сведение уравнения Риккати к линейному}
+
+\begin{theorem}[\textbf{Об интегрировании уравнения Риккати}]
+    Если известно хотя бы одно частное решение $y_1(x) \in C^1(I)$ уравнения
+    Риккати \eqref{eq:l6_riccati}, то нахождение его общего решения сводится к
+    интегрированию ЛНДУ 1-го порядка.
+\end{theorem}
+
+\begin{proof}[Обоснование метода]~\\
+    \begin{quote}
+        Выполним замену искомой функции, отсчитывая отклонение $z(x)$ от
+        известного частного решения $y_1(x)$:
+        \begin{equation} \label{eq:l6_riccati_sub}
+            y(x) = y_1(x) + z(x) \implies y' = y_1' + z'. \tag{14}
+        \end{equation}
+        Подставим \eqref{eq:l6_riccati_sub} в уравнение \eqref{eq:l6_riccati} и
+        раскроем скобки:
+        \[
+            y_1' + z' = \left[a(x) y_1^2 + b(x) y_1 + c(x)\right] +
+            \left(b(x) + 2 a(x) y_1(x)\right) z + a(x) z^2.
+        \]
+        Поскольку $y_1(x)$ — решение исходного уравнения, квадратная скобка
+        сокращается с $y_1'$, и мы получаем \textdef{уравнение Бернулли}
+        относительно $z(x)$ с показателем $k = 2$:
+        \begin{equation} \label{eq:l6_riccati_bern}
+            z' - \left(b(x) + 2 a(x) y_1(x)\right) z = a(x) z^2. \tag{15}
+        \end{equation}
+        Применяя стандартную подстановку Бернулли \eqref{eq:l6_bern_z} при
+        $k = 2$:
+        \begin{equation} \label{eq:l6_riccati_u}
+            u(x) = z^{-1} = \frac{1}{z(x)} \implies \frac{z'}{z^2} = -u',
+            \tag{16}
+        \end{equation}
+        получаем \textdef{линейное неоднородное уравнение (ЛНДУ)} относительно
+        $u(x)$:
+        \begin{equation} \label{eq:l6_riccati_lin}
+            u' + \left(b(x) + 2 a(x) y_1(x)\right) u = -a(x). \tag{17}
+        \end{equation}
+        Следовательно, сквозная подстановка $y(x) = y_1(x) + \dfrac{1}{u(x)}$
+        сводит уравнение Риккати непосредственно к ЛНДУ \eqref{eq:l6_riccati_lin}.
+    \end{quote}
+\end{proof}
+
+\subsubsection{Задачи о кратных частных решениях уравнения Риккати}
+
+\begin{problem}
+    Пусть $y_1(x), y_2(x)$ — два различных частных решения уравнения Риккати
+    \eqref{eq:l6_riccati}. Доказать, что общее решение уравнения находится с
+    помощью \textbf{одного интегрирования}.
+\end{problem}
+
+\begin{proof}[Решение]~\\
+    \begin{quote}
+        Подстановка $y = y_1(x) + \frac{1}{u(x)}$ приводит уравнение Риккати к
+        ЛНДУ \eqref{eq:l6_riccati_lin}:
+        \begin{equation} \label{eq:l6_task1_lin}
+            u' + P(x) u = Q(x), \tag{18}
+        \end{equation}
+        где $P(x) = b(x) + 2 a(x) y_1(x)$ и $Q(x) = -a(x)$. Так как известно
+        второе решение $y_2(x) \neq y_1(x)$, функция
+        \[
+            u_1(x) = \frac{1}{y_2(x) - y_1(x)}
+        \]
+        является известным частным решением ЛНДУ \eqref{eq:l6_task1_lin}:
+        \begin{equation} \label{eq:l6_task1_u1}
+            u_1' + P(x) u_1 = Q(x). \tag{19}
+        \end{equation}
+        По теореме 6.1 о структуре общего решения ЛНДУ положим
+        $u(x) = u_1(x) + v(x)$. Вычитая тождество \eqref{eq:l6_task1_u1} из
+        \eqref{eq:l6_task1_lin}, получаем для $v(x)$ однородное уравнение
+        (ЛОДУ):
+        \begin{equation} \label{eq:l6_task1_v}
+            v' + P(x) v = 0 \implies v(x) = C \cdot e^{-\int P(x) \, dx}.
+            \tag{20}
+        \end{equation}
+        Для нахождения $v(x)$ требуется взять ровно один интеграл, после чего
+        общее решение записывается как
+        \[
+            y(x) = y_1(x) + \frac{1}{\frac{1}{y_2(x) - y_1(x)} +
+            C \cdot e^{-\int P(x) \, dx}}.
+        \]
+    \end{quote}
+\end{proof}
+
+\begin{problem}
+    Пусть $y_1(x), y_2(x), y_3(x)$ — три попарно различных частных решения
+    уравнения Риккати \eqref{eq:l6_riccati}. Доказать, что общее решение
+    находится чисто алгебраически — \textbf{без единого интегрирования}.
+\end{problem}
+
+\begin{proof}[Решение]~\\
+    \begin{quote}
+        Для линейного уравнения \eqref{eq:l6_task1_lin} нам теперь известны два
+        различных частных решения:
+        \[
+            u_1(x) = \frac{1}{y_2(x) - y_1(x)}, \quad
+            u_2(x) = \frac{1}{y_3(x) - y_1(x)}.
+        \]
+        Их разность $v_0(x) = u_1(x) - u_2(x) \neq 0$ удовлетворяет
+        соответствующему однородному уравнению (ЛОДУ):
+        \begin{equation} \label{eq:l6_task2_hom}
+            (u_1 - u_2)' + P(x) (u_1 - u_2) = 0. \tag{21}
+        \end{equation}
+        Следовательно, общее решение ЛОДУ имеет вид $v(x) = C \cdot (u_1 - u_2)$,
+        а общее решение ЛНДУ \eqref{eq:l6_task1_lin} записывается без
+        интегрирования как:
+        \[
+            u(x) = u_1(x) + C \cdot \left(u_1(x) - u_2(x)\right).
+        \]
+        Возвращаясь к $y(x) = y_1(x) + \frac{1}{u(x)}$, получаем общее решение
+        уравнения Риккати без квадратур.
+    \end{quote}
+\end{proof}
+
+\begin{remark}
+    Подставляя выражения для $u, u_1, u_2$ в соотношение
+    $\frac{u - u_1}{u_2 - u_1} = \tilde{C}$, мы приходим к теореме о
+    \textdef{постоянстве сложного (ангармонического) отношения} любых четырёх
+    решений уравнения Риккати:
+    \[
+        \frac{y - y_2}{y - y_1} : \frac{y_3 - y_2}{y_3 - y_1} = \tilde{C}.
+    \]
+\end{remark}
